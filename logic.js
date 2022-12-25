@@ -1,4 +1,6 @@
 //code is generated https://chat.openai.com/chat/918d15b1-4f80-45b3-9457-65edd83f8a7b
+//with some manual edit
+//P.S. who is code owner?! funny. 
 function isNoSupply( i ) {
 	// no supply test
     if (i > 0 && data[i-1].vsa_tag === "UT" && data[i+1].close > data[i].close) {
