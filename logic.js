@@ -1,6 +1,6 @@
 function isNoSupply( i ) {
 	// no supply test
-    if (i > 0 && data[i-1].vsa_tag === "UT" && data[i+1].close > data[i].close) {
+    if (i > 10 && data[i-1].vsa_tag === "UT" && data[i+1].close > data[i].close) {
       let current = data[i];
       let spread = current.high - current.low;
       let previous = data[i-1];
@@ -18,12 +18,15 @@ function isNoSupply( i ) {
 }
 function isDumbMoney( i ) {
     // weakness (bearish) is evidence of supply
-    if (i > 0) {
+    if (i > 3) {
       let consecutiveBars = 0;
       let sumVolume = 0;
       let sumatr = 0;
+      let sum = 0;
       for (let j = i; j < data.length ; j++) {
-        if (data[j].close > data[i-1].close && data[j].volume < data[j].volavg && data[j].atr < 1) {
+    	    sum += data[j].close;
+		let sma = sum / (j - i + 1);
+        if (data[j].close > sma && data[j].volume < data[j].volavg && data[j].atr < 1) {
           consecutiveBars++;
           sumVolume += data[j].volume;
           sumatr += data[j].atr;
