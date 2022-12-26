@@ -4,13 +4,12 @@ function isNoSupply( i ) {
       let current = data[i];
       let spread = current.high - current.low;
       let previous = data[i-1];
-      let previousSpread = previous.high - previous.low;
       let sum = 0;
       for (let j = i-9; j <= i; j++) {
         sum += data[j].close;
       }
       let sma = sum / 10;
-      if (previous.close > sma && current.volume < current.volavg / 2 && spread < previousSpread / 4) {
+      if (previous.close > sma && current.volume < current.volavg / 2 && current.atr < previous.atr / 3) {
         current.vsa_tag = "NS"; // no supply (bullish)
         return true;
       }
