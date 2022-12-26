@@ -1,6 +1,3 @@
-//code is generated https://chat.openai.com/chat/918d15b1-4f80-45b3-9457-65edd83f8a7b
-//with some manual edit
-
 function isNoSupply( i ) {
 	// no supply test
     if (i > 0 && data[i-1].vsa_tag === "UT" && data[i+1].close > data[i].close) {
@@ -20,7 +17,7 @@ function isNoSupply( i ) {
     }
     return false;
 }
-function isDM( i ) {
+function isDumbMoney( i ) {
     // weakness (bearish) is evidence of supply
     if (i > 0) {
       let consecutiveBars = 0;
@@ -58,6 +55,10 @@ for (let j = i + 1; j < data.length; j++) {
 		consecutiveBars++;
 	} else break;
 }
+if(logic_control.current_range.high < data[i + consecutiveBars].close)
+	logic_control.current_range.breakout = true;
+else
+	logic_control.current_range.breakout = false;
 return consecutiveBars;
 }
 function isDownThrust(i) {
@@ -69,15 +70,62 @@ for (let j = i + 1; j < data.length; j++) {
 		consecutiveBars++;
 	} else break;
 }
+if(logic_control.current_range.low > data[i + consecutiveBars].close)
+	logic_control.current_range.breakout = true;
+else
+	logic_control.current_range.breakout = false;
 return consecutiveBars;
 }
 function generateVSA(data, logic_control) {
+logic_control.current_range.lastbar = 0;
+logic_control.current_range.breakout = false;
   for (let i = 0; i < data.length; i++) {
+	//signs are checked in order of power/significance
     if (isNS(i)) continue;
-    i += isDM(i);
+    i += isDumbMoney(i);
     if(data[i].close > data[i+1].close)
    		i += isUpThrust(i);
 	else
 		i += isDownThrust(i);
+	detectRangeBreak(i);
+  }
+}
+function backToPrevRange(current_bar) {
+	if(logic_control.price_ranges.length = 0) return false; //no ranges records exist
+	if(logic_control.price_ranges[logic_control.price_ranges.length-1].low < current_bar.close
+	&& current_bar.close < logic_control.price_ranges[logic_control.price_ranges.length-1].high) {
+		//extend range
+		if(logic_control.current_range.high < current_bar.high)  logic_control.current_range.high = current_bar.high;
+		if(logic_control.current_range.low > current_bar.low)  logic_control.current_range.low = current_bar.low;
+		logic_control.price_ranges.pop(); //roll back
+		return true;
+	}
+	return false;
+}
+function detectRangeBreak(i) {
+const hours = 3600*1000;
+if(!logic_control.current_range.breakout) return;
+if(data[i].time - data[logic_control.current_range.lastbar].time < 24*hours) return; //delay
+  let closed = data[i].close;
+  //check if 48 hours passed
+  if (data[i].time - data[logic_control.current_range.start].time > 48*hours) {
+	  // check if price is back into previous range
+	  if( backToPrevRange(data[i]) ) return;
+	  // check if current bar breaks range
+	  if (closed > logic_control.current_range.high || closed < logic_control.current_range.low) {
+	    // push current range to price_ranges
+	    logic_control.price_ranges.push(logic_control.current_range);
+	    // create new range
+	    logic_control.current_range = {
+	    	  start: i,
+	      high: closed,
+	      low: closed
+	    };
+	  }
+  // update range high/low
+  } else {
+    if (closed > logic_control.current_range.high) logic_control.current_range.high = closed;
+    else if (closed < logic_control.current_range.low) logic_control.current_range.low = closed;
+    logic_control.current_range.lastbar = i;
   }
 }
