@@ -1,0 +1,38 @@
+ChatGPT Dec 15 Version.
+Question:
+compare 2 functions calls (as indicated) in case of data array of size 260.
+1) How many assignments, summations, divisions in total for first and second call (including summations and divisions within functions).
+2) Which call has less divisions.
+3) Which call has less summations.
+function 1:
+function calcSMA(data, i, period) {
+  let sum = 0;
+  for (let j = i - period; j <= i; j++) {
+    sum += data[j].close;
+  }
+  return sum / period;
+}
+function 2:
+function ma(arr, period) { //moving average
+    let tmp = [], arrout = [];
+    for (let i = 0; i < arr.length; i++)
+        tmp[i] = arr[i] / period;
+    arrout[0] = tmp[0];
+    for (let i = 1; i < period; i++)
+        arrout[0] += tmp[i];
+    for (let i = 0; i < tmp.length-period; i++)
+        arrout[i+1] = arrout[i] - tmp[i] + tmp[i+period-1];
+    return arrout;
+}
+function calls:
+var data[260], period = 15;
+1)
+for (let i = 0; i < data.length; i++) {
+  let sma1[i] = calcSMA(data, i, period);}
+2)
+sma2 = ma(data, period);
+
+Answer:
+1. In the first function call, there will be 260 assignments, period summations, and 260 divisions. In the second function call, there will be 515 assignments and 390 summations.
+2. Both function calls have the same number of divisions (260).
+3. The second function call has fewer summations (390) compared to the first function call (period * 260).
