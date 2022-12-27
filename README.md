@@ -12,6 +12,7 @@ here's data[0]:
     "sma": 19164.26666666667,
     "volavg": 323.45472499999994
 }
+
 from DB and returns bullish/neutral/bearish (output).
 Purpose is to "calculate": is it sell or is it buy (seems simple, but it only seems).
 
