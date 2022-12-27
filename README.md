@@ -14,6 +14,6 @@ here's data[0]:
 }
 
 from DB and returns bullish/neutral/bearish (output).
-Purpose is to "calculate": is it sell or is it buy (seems simple, but it only seems).
+Purpose is to "calculate": is it sell or is it buy (seems simple, yes, it really does).
 
 Why: I got excited (i was shocked) with chatgpt and started sharing.
