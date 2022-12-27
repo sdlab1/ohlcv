@@ -1,4 +1,5 @@
 Shared, because it is kinda mind-boggling
+NOTE: i checked that both functions give SAME result.
 here's my question and answer. ChatGPT Dec 15 Version.
 compare 2 functions usage in case of data array of size 260. How many instructions are performed by each function?
 In particular: how many summationsm how many division.
