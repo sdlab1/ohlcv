@@ -47,6 +47,7 @@ For function 2, there are 3 iterations of the loop, and within each loop, there 
 NOTE: there's no division in third loop, oops:
     for (let i = 0; i < tmp.length-period; i++)
         arrout[i+1] = arrout[i] - tmp[i] + tmp[i+period-1];
+(in above answer it is correct: 2) same number of divisions. Both answer have 100% identical functions' code, it is copy-pasted.)
 
 In terms of the number of instructions performed, function 1 is more efficient because it has fewer loops and fewer divisions. However, the difference in efficiency may not be noticeable for such small inputs. It's also worth noting that the second function does not calculate the SMA, but rather a different moving average called the cumulative moving average (CMA).
-NOTE: it is actually SMA.
+NOTE: it is actually SMA (i written code to compare results, results are equal).
